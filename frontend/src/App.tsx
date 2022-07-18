@@ -24,10 +24,10 @@ export const App = observer(() => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {store.rows.map(row => {
+                    {store.rows.map((row, i) => {
                         return (
-                            <TableRow>
-                                <TableCell>
+                            <TableRow key={i}>
+                                <TableCell style={{ padding: '10px' }}>
                                     <TextField
                                         type='tel'
                                         error={!is_time(row.on)}
@@ -35,7 +35,7 @@ export const App = observer(() => {
                                         onChange={action(e => (row.on = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ padding: '10px' }}>
                                     <TextField
                                         type='tel'
                                         error={!is_time(row.up)}
@@ -43,7 +43,7 @@ export const App = observer(() => {
                                         onChange={action(e => (row.up = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ padding: '10px' }}>
                                     <TextField
                                         type='tel'
                                         error={!is_time(row.down)}
@@ -51,7 +51,7 @@ export const App = observer(() => {
                                         onChange={action(e => (row.down = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={{ padding: '10px' }}>
                                     <TextField
                                         type='tel'
                                         error={!is_time(row.off)}
@@ -67,24 +67,34 @@ export const App = observer(() => {
                     })}
                 </TableBody>
             </Table>
-            <Button
-                variant='outlined'
-                style={{ margin: '20px', color: 'gray' }}
-                onClick={() => {
-                    navigator.clipboard.writeText(store.current_time)
-                }}
-            >
-                Copy Time {store.current_time}
-            </Button>
-            <Button
-                variant='outlined'
-                style={{ margin: '20px' }}
-                onClick={action(() => {
-                    store.rows.push({ on: '', up: '', down: '', off: '' })
-                })}
-            >
-                Add Leg
-            </Button>
+            <Center>
+                <Button
+                    variant='outlined'
+                    style={{ margin: '20px' }}
+                    onClick={action(() => {
+                        store.rows.push({ on: '', up: '', down: '', off: '' })
+                    })}
+                >
+                    Add Leg
+                </Button>
+                <Button
+                    variant='outlined'
+                    style={{ margin: '20px', color: 'gray' }}
+                    onClick={() => {
+                        navigator.clipboard.writeText(store.current_time)
+                    }}
+                >
+                    Copy UTC:
+                    <span style={{ color: 'black', marginLeft: '5px' }}>{store.current_time}</span>
+                </Button>
+            </Center>
         </>
     )
 })
+
+const Center = ({ children, style }: any) => {
+    return (
+        //@ts-ignore
+        <center style={style}>{children}</center>
+    )
+}
