@@ -12,48 +12,72 @@ setInterval(
 export const App = observer(() => {
     return (
         <>
-            <Table size='small' style={{ margin: '20px' }}>
+            <Table size='small' style={{ margin: '0px' }}>
                 <TableHead>
                     <TableRow>
                         <TableCell>On</TableCell>
                         <TableCell>Up</TableCell>
-                        <TableCell>Down</TableCell>
+                        <TableCell>Dwn</TableCell>
                         <TableCell>Off</TableCell>
-                        <TableCell>Air Time</TableCell>
-                        <TableCell>Flight Time</TableCell>
+                        <TableCell>Air</TableCell>
+                        <TableCell>Flt</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {store.rows.map((row, i) => {
                         return (
                             <TableRow key={i}>
-                                <TableCell style={{ padding: '10px' }}>
+                                <TableCell style={{ padding: '4px' }}>
                                     <TextField
+                                        size='small'
+                                        inputProps={{
+                                            style: {
+                                                padding: 5
+                                            }
+                                        }}
                                         type='tel'
                                         error={!is_time(row.on)}
                                         value={row.on}
                                         onChange={action(e => (row.on = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell style={{ padding: '10px' }}>
+                                <TableCell style={{ padding: '4px' }}>
                                     <TextField
+                                        size='small'
                                         type='tel'
+                                        inputProps={{
+                                            style: {
+                                                padding: 5
+                                            }
+                                        }}
                                         error={!is_time(row.up)}
                                         value={row.up}
                                         onChange={action(e => (row.up = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell style={{ padding: '10px' }}>
+                                <TableCell style={{ padding: '4px' }}>
                                     <TextField
+                                        size='small'
                                         type='tel'
+                                        inputProps={{
+                                            style: {
+                                                padding: 5
+                                            }
+                                        }}
                                         error={!is_time(row.down)}
                                         value={row.down}
                                         onChange={action(e => (row.down = e.target.value))}
                                     />
                                 </TableCell>
-                                <TableCell style={{ padding: '10px' }}>
+                                <TableCell style={{ padding: '4px' }}>
                                     <TextField
+                                        size='small'
                                         type='tel'
+                                        inputProps={{
+                                            style: {
+                                                padding: 5
+                                            }
+                                        }}
                                         error={!is_time(row.off)}
                                         value={row.off}
                                         onChange={action(e => (row.off = e.target.value))}
