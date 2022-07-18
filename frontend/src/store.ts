@@ -2,14 +2,16 @@ import { observable } from 'mobx'
 
 export type Row = {
     on: string
-    takeoff: string
-    landing: string
+    up: string
+    down: string
     off: string
-    hobbs_arrive: string
-    hobbs_depart: string
 }
+const padded = (n: string) => (n.length === 1 ? '0' + n : n)
+export const get_time = () =>
+    `${padded(String(new Date().getUTCHours()))}${padded(String(new Date().getUTCMinutes()))}`
 
 export const store = observable({
+    current_time: get_time(),
     rows: [{}] as Row[]
 })
 
@@ -34,7 +36,7 @@ export const time_diff = (start: string, end: string): number => {
     if (!(is_time(start) && is_time(end))) return 0
 
     const h = parseInt(end.substring(0, 2)) - parseInt(start.substring(0, 2))
-    const m = parseInt(end.substring(3, 5)) - parseInt(start.substring(3, 5))
+    const m = parseInt(end.substring(2, 4)) - parseInt(start.substring(2, 4))
 
     return h + m_to_dec(m)
 }
