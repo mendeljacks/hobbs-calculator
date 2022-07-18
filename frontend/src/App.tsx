@@ -29,6 +29,7 @@ export const App = observer(() => {
                             <TableRow>
                                 <TableCell>
                                     <TextField
+                                        type='tel'
                                         error={!is_time(row.on)}
                                         value={row.on}
                                         onChange={action(e => (row.on = e.target.value))}
@@ -36,6 +37,7 @@ export const App = observer(() => {
                                 </TableCell>
                                 <TableCell>
                                     <TextField
+                                        type='tel'
                                         error={!is_time(row.up)}
                                         value={row.up}
                                         onChange={action(e => (row.up = e.target.value))}
@@ -43,6 +45,7 @@ export const App = observer(() => {
                                 </TableCell>
                                 <TableCell>
                                     <TextField
+                                        type='tel'
                                         error={!is_time(row.down)}
                                         value={row.down}
                                         onChange={action(e => (row.down = e.target.value))}
@@ -50,6 +53,7 @@ export const App = observer(() => {
                                 </TableCell>
                                 <TableCell>
                                     <TextField
+                                        type='tel'
                                         error={!is_time(row.off)}
                                         value={row.off}
                                         onChange={action(e => (row.off = e.target.value))}
