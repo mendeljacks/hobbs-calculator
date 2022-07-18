@@ -1,34 +1,103 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material'
+import { action } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import { is_time, Row, store, time_diff } from './store'
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App = observer(() => {
+    return (
+        <>
+            <Table style={{ margin: '20px' }}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>On</TableCell>
+                        <TableCell>Takeoff</TableCell>
+                        <TableCell>Landing</TableCell>
+                        <TableCell>Off</TableCell>
+                        <TableCell>Hobbs Depart</TableCell>
+                        <TableCell>Hobbs Arrive</TableCell>
+                        <TableCell>Air Time</TableCell>
+                        <TableCell>Flight Time</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {store.rows.map(row => {
+                        return (
+                            <TableRow>
+                                <TableCell>
+                                    <TextField
+                                        error={!is_time(row.on)}
+                                        value={row.on}
+                                        onChange={action(e => (row.on = e.target.value))}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        error={!is_time(row.takeoff)}
+                                        value={row.takeoff}
+                                        onChange={action(e => (row.takeoff = e.target.value))}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        error={!is_time(row.landing)}
+                                        value={row.landing}
+                                        onChange={action(e => (row.landing = e.target.value))}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        error={!is_time(row.off)}
+                                        value={row.off}
+                                        onChange={action(e => (row.off = e.target.value))}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        error={!is_time(row.off)}
+                                        value={row.hobbs_depart}
+                                        onChange={action(e => (row.hobbs_depart = e.target.value))}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TextField
+                                        value={row.hobbs_arrive}
+                                        onChange={action(e => (row.hobbs_arrive = e.target.value))}
+                                    />
+                                </TableCell>
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
-
-export default App
+                                <TableCell>{time_diff(row.takeoff, row.landing)}</TableCell>
+                                <TableCell>{time_diff(row.on, row.off)}</TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
+            </Table>
+            <Button
+                variant='outlined'
+                style={{ margin: '20px', color: 'gray' }}
+                onClick={() => {
+                    const current_time = `${new Date().getUTCHours()}${new Date().getUTCMinutes()}`
+                    navigator.clipboard.writeText(current_time)
+                }}
+            >
+                Copy Time
+            </Button>
+            <Button
+                variant='outlined'
+                style={{ margin: '20px' }}
+                onClick={action(() => {
+                    store.rows.push({} as Row)
+                })}
+            >
+                Add Leg
+            </Button>
+            <Button
+                variant='outlined'
+                style={{ margin: '20px', color: 'green' }}
+                onClick={action(() => {})}
+            >
+                Save
+            </Button>
+        </>
+    )
+})
