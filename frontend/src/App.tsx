@@ -1,11 +1,12 @@
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material'
+import { margin } from '@mui/system'
 import { action } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { get_time, is_time, Row, store, time_diff } from './store'
 
 setInterval(
     action(() => {
-        store.current_time = get_time()
+        store.current_time = get_time(new Date())
     }),
     1000
 )
@@ -21,10 +22,13 @@ export const App = observer(() => {
                         <TableCell>Off</TableCell>
                         <TableCell>Air</TableCell>
                         <TableCell>Flt</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {store.rows.map((row, i) => {
+                        const air = time_diff(row.up, row.down)
+                        const flt = time_diff(row.on, row.off)
                         return (
                             <TableRow key={i}>
                                 <TableCell style={{ padding: '4px' }}>
@@ -32,11 +36,12 @@ export const App = observer(() => {
                                         size='small'
                                         inputProps={{
                                             style: {
-                                                padding: 5
+                                                padding: 5,
+                                                width: '40px'
                                             }
                                         }}
                                         type='tel'
-                                        error={!is_time(row.on)}
+                                        error={row.on.length > 0 && !is_time(row.on)}
                                         value={row.on}
                                         onChange={action(e => (row.on = e.target.value))}
                                     />
@@ -47,10 +52,11 @@ export const App = observer(() => {
                                         type='tel'
                                         inputProps={{
                                             style: {
-                                                padding: 5
+                                                padding: 5,
+                                                width: '40px'
                                             }
                                         }}
-                                        error={!is_time(row.up)}
+                                        error={row.up.length > 0 && !is_time(row.up)}
                                         value={row.up}
                                         onChange={action(e => (row.up = e.target.value))}
                                     />
@@ -61,10 +67,11 @@ export const App = observer(() => {
                                         type='tel'
                                         inputProps={{
                                             style: {
-                                                padding: 5
+                                                padding: 5,
+                                                width: '40px'
                                             }
                                         }}
-                                        error={!is_time(row.down)}
+                                        error={row.down.length > 0 && !is_time(row.down)}
                                         value={row.down}
                                         onChange={action(e => (row.down = e.target.value))}
                                     />
@@ -75,17 +82,32 @@ export const App = observer(() => {
                                         type='tel'
                                         inputProps={{
                                             style: {
-                                                padding: 5
+                                                padding: 5,
+                                                width: '40px'
                                             }
                                         }}
-                                        error={!is_time(row.off)}
+                                        error={row.off.length > 0 && !is_time(row.off)}
                                         value={row.off}
                                         onChange={action(e => (row.off = e.target.value))}
                                     />
                                 </TableCell>
 
-                                <TableCell>{time_diff(row.up, row.down)}</TableCell>
-                                <TableCell>{time_diff(row.on, row.off)}</TableCell>
+                                <TableCell>{isNaN(air) ? '-' : air}</TableCell>
+                                <TableCell>{isNaN(flt) ? '-' : flt}</TableCell>
+                                <TableCell style={{ margin: '0px', padding: '0px' }}>
+                                    <span
+                                        style={{
+                                            color: 'red',
+                                            width: '5px',
+                                            padding: '0px'
+                                        }}
+                                        onClick={action(() => {
+                                            store.rows.splice(i, 1)
+                                        })}
+                                    >
+                                        X
+                                    </span>
+                                </TableCell>
                             </TableRow>
                         )
                     })}

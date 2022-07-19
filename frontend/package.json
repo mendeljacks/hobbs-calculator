@@ -1,27 +1,59 @@
 {
-  "name": "hobbs-calculator",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/material": "^5.9.0",
-    "mobx": "^6.6.1",
-    "mobx-react-lite": "^3.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.0.0",
-    "typescript": "^4.6.4",
-    "vite": "^3.0.0"
-  }
+    "name": "hobbs-calculator",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "mocha": "mocha --package package.json",
+        "cov": "nodemon --signal SIGKILL --exec nyc --reporter=lcov mocha --package package.json",
+        "test": "nodemon --signal SIGKILL --exec mocha --package package.json"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.9.3",
+        "@emotion/styled": "^11.9.3",
+        "@mui/material": "^5.9.0",
+        "mobx": "^6.6.1",
+        "mobx-react-lite": "^3.4.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.3.1",
+        "@types/mocha": "^9.1.1",
+        "@types/react": "^18.0.15",
+        "@types/react-dom": "^18.0.6",
+        "@vitejs/plugin-react": "^2.0.0",
+        "chai": "^4.3.6",
+        "mocha": "^10.0.0",
+        "nyc": "^15.1.0",
+        "sucrase": "^3.24.0",
+        "typescript": "^4.6.4",
+        "vite": "^3.0.0"
+    },
+    "nodemonConfig": {
+        "verbose": true,
+        "legacyWatch": true,
+        "ignore": [
+            "node_modules"
+        ],
+        "watch": [
+            "./",
+            "../common"
+        ],
+        "signal": "SIGKILL",
+        "exec": "npm run mocha",
+        "ext": "ts, js, jsx, tsx"
+    },
+    "mocha": {
+        "require": [
+            "sucrase/register/ts"
+        ],
+        "spec": [
+            "**/*.test.ts"
+        ],
+        "timeout": 0
+    }
 }
