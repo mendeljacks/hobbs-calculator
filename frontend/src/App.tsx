@@ -2,6 +2,7 @@ import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField } f
 import { margin } from '@mui/system'
 import { action } from 'mobx'
 import { observer } from 'mobx-react-lite'
+import { Ref, useRef } from 'react'
 import { get_time, is_time, Row, store, time_diff } from './store'
 
 setInterval(
@@ -26,91 +27,9 @@ export const App = observer(() => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {store.rows.map((row, i) => {
-                        const air = time_diff(row.up, row.down)
-                        const flt = time_diff(row.on, row.off)
-                        return (
-                            <TableRow key={i}>
-                                <TableCell style={{ padding: '4px' }}>
-                                    <TextField
-                                        size='small'
-                                        inputProps={{
-                                            style: {
-                                                padding: 5,
-                                                width: '40px'
-                                            }
-                                        }}
-                                        type='tel'
-                                        error={row.on.length > 0 && !is_time(row.on)}
-                                        value={row.on}
-                                        onChange={action(e => (row.on = e.target.value))}
-                                    />
-                                </TableCell>
-                                <TableCell style={{ padding: '4px' }}>
-                                    <TextField
-                                        size='small'
-                                        type='tel'
-                                        inputProps={{
-                                            style: {
-                                                padding: 5,
-                                                width: '40px'
-                                            }
-                                        }}
-                                        error={row.up.length > 0 && !is_time(row.up)}
-                                        value={row.up}
-                                        onChange={action(e => (row.up = e.target.value))}
-                                    />
-                                </TableCell>
-                                <TableCell style={{ padding: '4px' }}>
-                                    <TextField
-                                        size='small'
-                                        type='tel'
-                                        inputProps={{
-                                            style: {
-                                                padding: 5,
-                                                width: '40px'
-                                            }
-                                        }}
-                                        error={row.down.length > 0 && !is_time(row.down)}
-                                        value={row.down}
-                                        onChange={action(e => (row.down = e.target.value))}
-                                    />
-                                </TableCell>
-                                <TableCell style={{ padding: '4px' }}>
-                                    <TextField
-                                        size='small'
-                                        type='tel'
-                                        inputProps={{
-                                            style: {
-                                                padding: 5,
-                                                width: '40px'
-                                            }
-                                        }}
-                                        error={row.off.length > 0 && !is_time(row.off)}
-                                        value={row.off}
-                                        onChange={action(e => (row.off = e.target.value))}
-                                    />
-                                </TableCell>
-
-                                <TableCell>{isNaN(air) ? '-' : air}</TableCell>
-                                <TableCell>{isNaN(flt) ? '-' : flt}</TableCell>
-                                <TableCell style={{ margin: '0px', padding: '0px' }}>
-                                    <span
-                                        style={{
-                                            color: 'red',
-                                            width: '5px',
-                                            padding: '0px'
-                                        }}
-                                        onClick={action(() => {
-                                            store.rows.splice(i, 1)
-                                        })}
-                                    >
-                                        X
-                                    </span>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
+                    {store.rows.map((row, i) => (
+                        <Leg key={i} row={row} i={i} />
+                    ))}
                 </TableBody>
             </Table>
             <Center>
@@ -134,6 +53,121 @@ export const App = observer(() => {
                 </Button>
             </Center>
         </>
+    )
+})
+
+const Leg = observer(({ row, i }: { row: Row; i: number }) => {
+    const air = time_diff(row.up, row.down)
+    const flt = time_diff(row.on, row.off)
+    const ref1: Ref<any> = useRef()
+    const ref2: Ref<any> = useRef()
+    const ref3: Ref<any> = useRef()
+    const ref4: Ref<any> = useRef()
+
+    return (
+        <TableRow>
+            <TableCell style={{ padding: '4px' }}>
+                <TextField
+                    inputRef={ref1}
+                    type='tel'
+                    size='small'
+                    inputProps={{
+                        style: {
+                            padding: 5,
+                            width: '40px'
+                        }
+                    }}
+                    error={row.on.length > 0 && !is_time(row.on)}
+                    value={row.on}
+                    onChange={action(e => {
+                        row.on = e.target.value
+                        if (e.target.value.length === 4) {
+                            ref2.current.focus()
+                        }
+                    })}
+                />
+            </TableCell>
+            <TableCell style={{ padding: '4px' }}>
+                <TextField
+                    inputRef={ref2}
+                    type='tel'
+                    size='small'
+                    inputProps={{
+                        style: {
+                            padding: 5,
+                            width: '40px'
+                        }
+                    }}
+                    error={row.up.length > 0 && !is_time(row.up)}
+                    value={row.up}
+                    onChange={action(e => {
+                        row.up = e.target.value
+                        if (e.target.value.length === 4) {
+                            ref3.current.focus()
+                        }
+                    })}
+                />
+            </TableCell>
+            <TableCell style={{ padding: '4px' }}>
+                <TextField
+                    inputRef={ref3}
+                    type='tel'
+                    size='small'
+                    inputProps={{
+                        style: {
+                            padding: 5,
+                            width: '40px'
+                        }
+                    }}
+                    error={row.down.length > 0 && !is_time(row.down)}
+                    value={row.down}
+                    onChange={action(e => {
+                        row.down = e.target.value
+                        if (e.target.value.length === 4) {
+                            ref4.current.focus()
+                        }
+                    })}
+                />
+            </TableCell>
+            <TableCell style={{ padding: '4px' }}>
+                <TextField
+                    inputRef={ref4}
+                    type='tel'
+                    size='small'
+                    inputProps={{
+                        style: {
+                            padding: 5,
+                            width: '40px'
+                        }
+                    }}
+                    error={row.off.length > 0 && !is_time(row.off)}
+                    value={row.off}
+                    onChange={action(e => {
+                        row.off = e.target.value
+                        if (e.target.value.length === 4) {
+                            ref4.current.blur()
+                        }
+                    })}
+                />
+            </TableCell>
+
+            <TableCell>{isNaN(air) ? '-' : air}</TableCell>
+            <TableCell>{isNaN(flt) ? '-' : flt}</TableCell>
+            <TableCell style={{ margin: '0px', padding: '0px' }}>
+                <span
+                    style={{
+                        color: 'red',
+                        width: '5px',
+                        padding: '0px'
+                    }}
+                    onClick={action(() => {
+                        store.rows.splice(i, 1)
+                    })}
+                >
+                    X
+                </span>
+            </TableCell>
+        </TableRow>
     )
 })
 
